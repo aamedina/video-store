@@ -21,10 +21,9 @@
   (format "Rental Record for %s\n" (:name customer)))
 
 (defmethod statement-footer :text
-  [amount points]
+  [{:keys [this-amount frequent-renter-points]} _]
   (format "You owed %.1f\nYou earned %d frequent renter points\n"
-          amount
-          points))
+          this-amount frequent-renter-points))
 
 (defmethod statement-header :html
   [customer _]
@@ -44,7 +43,7 @@
   [customer render-as]
   (reduce (fn [acc rental]
             (let [this-amount (calculate-price rental)
-                  line-item (rental-line-item rental render-as)
+                  line-item (rental-line-item rental this-amount render-as)
                   added-points (if (and (< 1 (:days rental))
                                         (= ::rental/new-release
                                            (:price-code (:movie rental))))

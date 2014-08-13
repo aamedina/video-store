@@ -42,7 +42,7 @@
                                          ::rental/new-release)
                            3))
                        (customer/add-rental
-                         (rental/create
+                        (rental/create
                            (movie/create "The Tigger Movie"
                                          ::rental/new-release)
                            3)))]
