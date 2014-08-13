@@ -1,0 +1,39 @@
+# how long is too long?
+> 1 page
+too many concerns
+SRP (Single Responsibility Principle)
+too long for understanding
+different levels of abstraction
+
+
+1. make it work
+2. make it right
+3. make it fast
+
+--------
+
+- loop/recur looks like a reduce
+
+- condp looks like a switch statement in C
+  - usually gets replaced by polymorphism
+  - for dynamic extensibility:
+    - if a new movie type comes in, we have to update existing code
+      - potentially in multiple places
+    - updating code risks breakage
+    - Open-Closed Principle. open to extension, closed to modification.
+
+- rental & movie could be protocols
+  - get off hard-coded clojure map, could be used from java
+  - *easier to swap out the underlying implementation*
+  - overhead of a function call (performance)
+  - benefit of records: optimized lookup, type checking
+  - downside of records: more memory, no structural sharing, performance of assoc
+  - some AOT compilation issues w/ records/protocols
+    - AOT is great for java interop
+
+- magic numbers: what do these mean?
+
+- UI / presentation is totally coupled
+  - what if we wanted an HTML statement?
+
+
