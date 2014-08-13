@@ -21,9 +21,9 @@
   (format "Rental Record for %s\n" (:name customer)))
 
 (defmethod statement-footer :text
-  [{:keys [this-amount frequent-renter-points]} _]
+  [{:keys [total-amount frequent-renter-points]} _]
   (format "You owed %.1f\nYou earned %d frequent renter points\n"
-          this-amount frequent-renter-points))
+          total-amount frequent-renter-points))
 
 (defmethod statement-header :html
   [customer _]
@@ -59,7 +59,7 @@
 (defmethod statement-footer :html
   [{:keys [total-amount frequent-renter-points]} _]
   [:div.footer
-   [:h2 (str "You owed " total-amount )]
+   [:h2 (str "You owed " total-amount)]
    [:h2 (str "You earned " frequent-renter-points " frequent renter points")]])
 
 (defmethod statement :html
@@ -71,7 +71,7 @@
       (statement-header customer :html)      
       [:div.body
        [:p body-text]]
-      (statement-footer customer :html)      
+      (statement-footer customer :html)
       (statement-footer stmt :html)])))
 
 (defmethod statement :text
