@@ -24,11 +24,15 @@
                          (rental/create
                            (movie/create "The Cell" ::rental/new-release)
                            3)))]
-      (should= (str "Rental Record for Fred\n"
-                    "\tThe Cell\t9.0\n"
-                    "You owed 9.0\n"
-                    "You earned 2 frequent renter points\n")
-               (stmt/statement customer :text))))
+      (should= customer
+               {:rentals
+                [{:type :rental
+                  :movie {:type :movie
+                          :title "The Cell"
+                          :price-code :video-store.rental/new-release}
+                  :days 3}]
+                :type :customer
+                :name "Fred"})))
 
   (it "produces a statement for two new releases"
     (let [customer (-> (customer/create "Fred")
@@ -42,12 +46,20 @@
                            (movie/create "The Tigger Movie"
                                          ::rental/new-release)
                            3)))]
-      (should= (str "Rental Record for Fred\n"
-                    "\tThe Cell\t9.0\n"
-                    "\tThe Tigger Movie\t9.0\n"
-                    "You owed 18.0\n"
-                    "You earned 4 frequent renter points\n")
-               (stmt/statement customer :text))))
+      (should= customer
+               {:rentals
+                [{:type :rental
+                  :movie {:type :movie
+                          :title "The Cell"
+                          :price-code :video-store.rental/new-release},
+                  :days 3}
+                 {:type :rental
+                  :movie {:type :movie
+                          :title "The Tigger Movie"
+                          :price-code :video-store.rental/new-release}
+                  :days 3}]
+                :type :customer
+                :name "Fred"})))
 
   (it "produces a statement for a single children's movie"
     (let [customer (-> (customer/create "Fred")
@@ -56,11 +68,15 @@
                            (movie/create "The Tigger Movie"
                                          ::rental/childrens)
                            3)))]
-      (should= (str "Rental Record for Fred\n"
-                    "\tThe Tigger Movie\t1.5\n"
-                    "You owed 1.5\n"
-                    "You earned 1 frequent renter points\n")
-               (stmt/statement customer :text))))
+      (should= customer
+               {:rentals
+                [{:days 3
+                  :movie {:type :movie
+                          :title "The Tigger Movie"
+                          :price-code :video-store.rental/childrens}
+                  :type :rental}]
+                :name "Fred"
+                :type :customer})))
 
   (it "produces a statement for multiple regular movies"
     (let [customer (-> (customer/create "Fred")
@@ -77,11 +93,21 @@
                          (rental/create
                            (movie/create "Eraserhead" ::rental/regular)
                            3)))]
-      (should= (str "Rental Record for Fred\n"
-                    "\tPlan 9 from Outer Space\t2.0\n"
-                    "\t8 1/2\t2.0\n"
-                    "\tEraserhead\t3.5\n"
-                    "You owed 7.5\n"
-                    "You earned 3 frequent renter points\n")
-               (stmt/statement customer :text)))))
+      (should= customer
+               {:rentals [{:type :rental
+                           :movie {:type :movie
+                                   :title "Plan 9 from Outer Space"
+                                   :price-code :video-store.rental/regular}
+                           :days 1}
+                          {:type :rental
+                           :movie {:type :movie
+                                   :title "8 1/2"
+                                   :price-code :video-store.rental/regular}
+                           :days 2}
+                          {:type :rental
+                           :movie {:type :movie
+                                   :title "Eraserhead"
+                                   :price-code :video-store.rental/regular}
+                           :days 3}]
+                :type :customer, :name "Fred"}))))
 
